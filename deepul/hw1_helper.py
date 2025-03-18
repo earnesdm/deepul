@@ -261,10 +261,11 @@ def q3c_save_results(dset_type, fn):
 
 # load vqvae mode
 def load_pretrain_vqvae(name: str):
+    device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
     data_dir = get_data_dir(1)
-    loaded_args = torch.load(join(data_dir, f"vqvae_args_{name}_ft" + ".pth"))
+    loaded_args = torch.load(join(data_dir, f"vqvae_args_{name}_ft" + ".pth"), map_location=device)
     vqvae = VQVAE(**loaded_args)
-    vqvae.load_state_dict(torch.load(join(data_dir, f"vqvae_{name}_ft" + ".pth")))
+    vqvae.load_state_dict(torch.load(join(data_dir, f"vqvae_{name}_ft" + ".pth"), map_location=device))
     return vqvae
 
 
